@@ -1,128 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Storm Intensity Dashboard</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      transition: background 0.8s ease;
-      background: #002b36;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storm Dashboard</title>
+<style>
+  /* Global Styles */
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #0b2421;
+    color: white;
+    transition: background 0.8s ease;
+    min-height: 100vh;
+  }
 
-    h1 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 2em;
-    }
+  /* Navbar */
+  .navbar {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+  }
 
-    .data-box {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 20px 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      margin: 20px;
-    }
+  .navbar a {
+    color: #ddd;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
 
-    .value {
-      font-size: 2.5em;
-      font-weight: bold;
-      margin: 10px 0;
-    }
+  .navbar a:hover {
+    color: #00ff6a;
+  }
 
-    .unit {
-      font-size: 1.2em;
-      opacity: 0.8;
-    }
+  /* Header */
+  .header {
+    text-align: center;
+    margin-top: 100px;
+  }
 
-    .input-box {
-      margin-top: 20px;
-      text-align: center;
-    }
+  .icon {
+    font-size: 2em;
+    color: #00ff6a;
+    transition: color 0.5s ease;
+  }
 
-    input {
-      padding: 8px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      width: 100px;
-      text-align: center;
-      font-size: 1em;
-    }
+  h1 {
+    font-size: 2.2em;
+    margin: 10px 0;
+  }
 
-    button {
-      background: #00ff88;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      margin-left: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  .underline {
+    width: 60px;
+    height: 3px;
+    background: #00ff6a;
+    margin: 10px auto;
+    border-radius: 10px;
+    transition: background 0.5s ease;
+  }
 
-    button:hover {
-      background: #00cc66;
-    }
-  </style>
+  /* Info Section */
+  .info {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .info p {
+    margin: 6px 0;
+    font-size: 1.1em;
+  }
+
+  /* Data Section */
+  .data-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    gap: 120px;
+    flex-wrap: wrap;
+  }
+
+  .circle {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .circle svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
+  }
+
+  .circle text {
+    font-size: 2em;
+    font-weight: bold;
+    fill: white;
+  }
+
+  .label {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.1em;
+  }
+
+  /* Select Storm Button */
+  .select-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  select {
+    background: #111;
+    color: white;
+    border: 1px solid #00ff6a;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+</style>
 </head>
 <body>
-  <h1>🌪️ Storm Intensity Dashboard</h1>
 
-  <div class="data-box">
-    <div>Wind Speed:</div>
-    <div class="value" id="windSpeed">--</div>
-    <div class="unit">km/h</div>
+  <!-- Navbar -->
+  <div class="navbar">
+    <a href="#">Home</a>
+    <a href="#">Outlooks</a>
+    <a href="#">Archives</a>
+    <a href="#">Glossary</a>
+    <a href="#">Help</a>
+    <a href="#">FAQ</a>
   </div>
 
-  <div class="data-box">
-    <div>Pressure:</div>
-    <div class="value" id="pressure">--</div>
-    <div class="unit">mb</div>
+  <!-- Header -->
+  <div class="header">
+    <div class="icon" id="statusIcon">❗</div>
+    <h1>Current Information</h1>
+    <div class="underline" id="underline"></div>
   </div>
 
-  <div class="input-box">
-    <input type="number" id="windInput" placeholder="Wind (km/h)" />
-    <input type="number" id="pressureInput" placeholder="Pressure (mb)" />
-    <button onclick="updateData()">Update</button>
+  <!-- Information -->
+  <div class="info" id="stormInfo">
+    <p>📍 Current Location: <span id="location">14.3°N, 73.5°W</span></p>
+    <p>🌀 Radius of Maximum Winds: <span id="rmax">40NM</span></p>
+    <p>⭕ Radius of Outermost Closed Isobar: <span id="roci">160NM</span></p>
+    <p>🌡️ Environmental Pressure: <span id="envp">1009mb</span></p>
   </div>
 
-  <script>
-    function updateData() {
-      const windSpeed = parseInt(document.getElementById('windInput').value);
-      const pressure = parseInt(document.getElementById('pressureInput').value);
+  <!-- Data -->
+  <div class="data-container">
+    <div>
+      <div class="circle">
+        <svg width="220" height="220">
+          <circle cx="110" cy="110" r="90" stroke="#222" stroke-width="20" fill="none"></circle>
+          <circle id="windCircle" cx="110" cy="110" r="90" stroke="#00ff6a" stroke-width="20" fill="none" stroke-linecap="round" stroke-dasharray="565" stroke-dashoffset="565"></circle>
+        </svg>
+        <div id="windText">-- kph</div>
+      </div>
+      <div class="label">💨 Winds</div>
+    </div>
 
-      if (!isNaN(windSpeed)) {
-        document.getElementById('windSpeed').innerText = windSpeed;
-        updateBackground(windSpeed);
-      }
+    <div>
+      <div class="circle">
+        <svg width="220" height="220">
+          <circle cx="110" cy="110" r="90" stroke="#222" stroke-width="20" fill="none"></circle>
+          <circle id="pressureCircle" cx="110" cy="110" r="90" stroke="#00ff6a" stroke-width="20" fill="none" stroke-linecap="round" stroke-dasharray="565" stroke-dashoffset="565"></circle>
+        </svg>
+        <div id="pressureText">-- mb</div>
+      </div>
+      <div class="label">🌪️ Pressure</div>
+    </div>
+  </div>
 
-      if (!isNaN(pressure)) {
-        document.getElementById('pressure').innerText = pressure;
-      }
-    }
+  <!-- Select Storm -->
+  <div class="select-container">
+    <label for="stormSelect">🌀 Select Storm:</label>
+    <select id="stormSelect" onchange="loadStorm(this.value)">
+      <option value="storm1">Windstorm #12</option>
+      <option value="storm2">Potential Windstorm #13</option>
+      <option value="storm3">AOI #1</option>
+    </select>
+  </div>
 
-    function updateBackground(speed) {
-      let color = '#002b36'; // default calm
+<script>
+  // --- Storm Data (You edit these only in code) ---
+  const storms = {
+    storm1: { name: "Windstorm #12", wind: 83, pressure: 1001, color: "#00ff6a" },
+    storm2: { name: "Potential Windstorm #13", wind: 155, pressure: 978, color: "#ffae00" },
+    storm3: { name: "AOI #1", wind: 200, pressure: 950, color: "#ff0048" }
+  };
 
-      if (speed < 40) color = '#003f5c'; // breeze
-      else if (speed < 80) color = '#2f4b7c'; // windy
-      else if (speed < 120) color = '#665191'; // strong
-      else if (speed < 160) color = '#a05195'; // severe
-      else if (speed < 200) color = '#d45087'; // dangerous
-      else color = '#ff0054'; // extreme
+  // --- Functions ---
+  function loadStorm(stormKey) {
+    const storm = storms[stormKey];
+    document.getElementById("windText").innerText = `${storm.wind} km/h`;
+    document.getElementById("pressureText").innerText = `${storm.pressure} mb`;
 
-      document.body.style.background = color;
-    }
-  </script>
+    const maxDash = 565;
+    const windRatio = Math.min(storm.wind / 250, 1);
+    const pressureRatio = Math.min((1050 - storm.pressure) / 150, 1);
+
+    document.getElementById("windCircle").style.strokeDashoffset = maxDash - maxDash * windRatio;
+    document.getElementById("pressureCircle").style.strokeDashoffset = maxDash - maxDash * pressureRatio;
+
+    document.getElementById("windCircle").style.stroke = storm.color;
+    document.getElementById("pressureCircle").style.stroke = storm.color;
+    document.getElementById("underline").style.background = storm.color;
+    document.getElementById("statusIcon").style.color = storm.color;
+    document.body.style.background = `radial-gradient(circle at center, ${storm.color}22, #0b2421 80%)`;
+  }
+
+  // Default Storm
+  loadStorm("storm1");
+</script>
 </body>
 </html>
