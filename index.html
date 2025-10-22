@@ -1,263 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>European Windstorm Prediction Center - Storm Dashboard</title>
-<style>
-  /* ===== GENERAL STYLES ===== */
-  body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background-color: #041312;
-    color: white;
-    min-height: 100vh;
-    transition: background 0.5s ease;
-  }
-
-  /* ===== NAVBAR ===== */
-  .navbar {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-    backdrop-filter: blur(4px);
-  }
-
-  .navbar a {
-    color: #ccc;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-  }
-
-  .navbar a:hover {
-    color: #00ff6a;
-  }
-
-  /* ===== SELECT STORM ===== */
-  .select-container {
-    text-align: center;
-    margin-top: 80px;
-  }
-
-  select {
-    background: #111;
-    color: white;
-    border: 1px solid #00ff6a;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 1em;
-    cursor: pointer;
-  }
-
-  /* ===== HEADER ===== */
-  .header {
-    text-align: center;
-    margin-top: 40px;
-  }
-
-  .icon {
-    font-size: 2em;
-    color: #00ff6a;
-    transition: color 0.5s ease;
-  }
-
-  h1 {
-    font-size: 2.2em;
-    margin: 10px 0;
-  }
-
-  .underline {
-    width: 60px;
-    height: 3px;
-    background: #00ff6a;
-    margin: 10px auto;
-    border-radius: 10px;
-    transition: background 0.5s ease;
-  }
-
-  /* ===== STORM INFO ===== */
-  .info {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  .info p {
-    margin: 6px 0;
-    font-size: 1.1em;
-  }
-
-  /* ===== CIRCULAR DATA ===== */
-  .data-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
-    gap: 120px;
-    flex-wrap: wrap;
-  }
-
-  .circle {
-    position: relative;
-    width: 230px;
-    height: 230px;
-    border-radius: 50%;
-    background: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .circle svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotate(-90deg);
-  }
-
-  .circle text {
-    font-size: 2.6em;
-    font-weight: bold;
-    fill: white;
-  }
-
-  .label {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1.1em;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storm Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <h1>Storm Dashboard</h1>
+    </div>
+    <div class="navbar-right">
+      <select id="stormSelect">
+        <option value="none" selected>Select Storm</option>
+      </select>
+    </div>
+  </nav>
 
-  <!-- ===== NAVBAR ===== -->
-  <div class="navbar">
-    <a href="#">Home</a>
-    <a href="#">Outlooks</a>
-    <a href="#">Archives</a>
-    <a href="#">Glossary</a>
-    <a href="#">Help</a>
-    <a href="#">FAQ</a>
-  </div>
-
-  <!-- ===== SELECT STORM ===== -->
-  <div class="select-container">
-    <label for="stormSelect">🌀 Select Storm:</label>
-    <select id="stormSelect" onchange="loadStorm(this.value)">
-      <option value="storm1">Windstorm #12</option>
-      <option value="storm2">Potential Windstorm #13</option>
-      <option value="storm3">AOI #1</option>
-    </select>
-  </div>
-
-  <!-- ===== HEADER ===== -->
-  <div class="header">
-    <div class="icon" id="statusIcon">❗</div>
-    <h1>Current Information</h1>
-    <div class="underline" id="underline"></div>
-  </div>
-
-  <!-- ===== STORM INFO ===== -->
-  <div class="info" id="stormInfo">
-    <p>📍 Current Location: <span id="location">14.3°N, 73.5°W</span></p>
-    <p>🌀 Radius of Maximum Winds: <span id="rmax">40NM</span></p>
-    <p>⭕ Radius of Outermost Closed Isobar: <span id="roci">160NM</span></p>
-    <p>🌡️ Environmental Pressure: <span id="envp">1009mb</span></p>
-  </div>
-
-  <!-- ===== DATA ===== -->
-  <div class="data-container">
-    <div>
-      <div class="circle">
-        <svg width="230" height="230">
-          <circle cx="115" cy="115" r="90" stroke="#222" stroke-width="20" fill="none"></circle>
-          <circle id="windCircle" cx="115" cy="115" r="90" stroke="#00ff6a" stroke-width="20" fill="none" stroke-linecap="round" stroke-dasharray="565" stroke-dashoffset="565"></circle>
-        </svg>
-        <text x="50%" y="53%" text-anchor="middle" id="windText">--</text>
-      </div>
-      <div class="label">💨 Winds</div>
+  <div class="container">
+    <div class="info-header">
+      <div class="info-icon">❗</div>
+      <h2>Current Information</h2>
+      <div class="info-line"></div>
     </div>
 
-    <div>
-      <div class="circle">
-        <svg width="230" height="230">
-          <circle cx="115" cy="115" r="90" stroke="#222" stroke-width="20" fill="none"></circle>
-          <circle id="pressureCircle" cx="115" cy="115" r="90" stroke="#00ff6a" stroke-width="20" fill="none" stroke-linecap="round" stroke-dasharray="565" stroke-dashoffset="565"></circle>
+    <div id="stormDetails" class="details">
+      <p><span class="icon">📍</span> <strong>Current Location:</strong> <span id="location">--</span></p>
+      <p>🌪️ Radius Of Maximum Winds: <span id="maxWinds">--</span></p>
+      <p>🌀 Radius Of Outermost Closed Isobar: <span id="outerIsobar">--</span></p>
+      <p>⛈️ Environmental Pressure: <span id="envPressure">--</span></p>
+    </div>
+
+    <div class="gauges">
+      <div class="gauge">
+        <p class="label">💨 Winds:</p>
+        <svg width="180" height="180">
+          <circle class="bg" cx="90" cy="90" r="70" />
+          <circle id="windCircle" class="progress" cx="90" cy="90" r="70" />
         </svg>
-        <text x="50%" y="53%" text-anchor="middle" id="pressureText">--</text>
+        <div class="gauge-value" id="windValue">-- km/h</div>
       </div>
-      <div class="label">🌪️ Pressure</div>
+
+      <div class="gauge">
+        <p class="label">🌡️ Pressure:</p>
+        <svg width="180" height="180">
+          <circle class="bg" cx="90" cy="90" r="70" />
+          <circle id="pressureCircle" class="progress" cx="90" cy="90" r="70" />
+        </svg>
+        <div class="gauge-value" id="pressureValue">-- mb</div>
+      </div>
     </div>
   </div>
 
-<script>
-  /* ===== STORM DATA ===== */
-  const storms = {
-    storm1: {
-      name: "Windstorm #12",
-      wind: 83,
-      pressure: 1001,
-      color: "#00ff6a",
-      location: "14.3°N, 73.5°W",
-      rmax: "40NM",
-      roci: "160NM",
-      envp: "1009mb"
-    },
-    storm2: {
-      name: "Potential Windstorm #13",
-      wind: 155,
-      pressure: 978,
-      color: "#ffae00",
-      location: "38.5°N, 15.1°W",
-      rmax: "55NM",
-      roci: "180NM",
-      envp: "995mb"
-    },
-    storm3: {
-      name: "AOI #1",
-      wind: 200,
-      pressure: 950,
-      color: "#ff0048",
-      location: "50.2°N, 5.5°E",
-      rmax: "60NM",
-      roci: "200NM",
-      envp: "970mb"
-    }
-  };
-
-  /* ===== FUNCTION ===== */
-  function loadStorm(stormKey) {
-    const storm = storms[stormKey];
-    document.getElementById("windText").textContent = `${storm.wind}`;
-    document.getElementById("pressureText").textContent = `${storm.pressure}`;
-
-    document.getElementById("location").textContent = storm.location;
-    document.getElementById("rmax").textContent = storm.rmax;
-    document.getElementById("roci").textContent = storm.roci;
-    document.getElementById("envp").textContent = storm.envp;
-
-    const maxDash = 565;
-    const windRatio = Math.min(storm.wind / 250, 1);
-    const pressureRatio = Math.min((1050 - storm.pressure) / 150, 1);
-
-    document.getElementById("windCircle").style.strokeDashoffset = maxDash - maxDash * windRatio;
-    document.getElementById("pressureCircle").style.strokeDashoffset = maxDash - maxDash * pressureRatio;
-
-    document.getElementById("windCircle").style.stroke = storm.color;
-    document.getElementById("pressureCircle").style.stroke = storm.color;
-    document.getElementById("underline").style.background = storm.color;
-    document.getElementById("statusIcon").style.color = storm.color;
-  }
-
-  /* ===== DEFAULT STORM ===== */
-  loadStorm("storm1");
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
