@@ -63,8 +63,11 @@ body {
 
 .gauge {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .label {
@@ -73,13 +76,16 @@ body {
 }
 
 svg {
+  width: 200px;
+  height: 200px;
   transform: rotate(-90deg);
 }
 
 circle {
   fill: none;
-  stroke-width: 10;
+  stroke-width: 12;
   stroke-linecap: round;
+  transform: translate(10px, 10px);
 }
 
 .bg {
@@ -88,16 +94,16 @@ circle {
 
 .progress {
   stroke: #00ff80;
-  stroke-dasharray: 440;
-  stroke-dashoffset: 440;
+  stroke-dasharray: 565.48; /* circumference of circle with r=90 */
+  stroke-dashoffset: 565.48;
   transition: stroke 0.3s, stroke-dashoffset 0.5s;
 }
 
 .gauge-value {
   position: absolute;
-  top: 55px;
-  left: 0;
-  right: 0;
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: bold;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
