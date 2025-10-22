@@ -7,92 +7,52 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="navbar">
-    <h1>Select Storm</h1>
-    <select id="stormSelect">
-      <option value="alpha">Storm Alpha</option>
-      <option value="bravo">Storm Bravo</option>
-      <option value="charlie">Storm Charlie</option>
-    </select>
-  </div>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <h1>Storm Dashboard</h1>
+    </div>
+    <div class="navbar-right">
+      <select id="stormSelect">
+        <option value="none" selected>Select Storm</option>
+      </select>
+    </div>
+  </nav>
 
   <div class="container">
     <div class="info-header">
+      <div class="info-icon">❗</div>
       <h2>Current Information</h2>
       <div class="info-line"></div>
     </div>
 
-    <div class="gauges">
-      <div class="gauge" id="windGauge">
-        <div class="label">Wind Speed</div>
-        <svg>
-          <circle class="bg"></circle>
-          <circle class="progress" id="windProgress"></circle>
-        </svg>
-        <div class="gauge-value" id="windValue">0 km/h</div>
-      </div>
-
-      <div class="gauge" id="pressureGauge">
-        <div class="label">Pressure</div>
-        <svg>
-          <circle class="bg"></circle>
-          <circle class="progress" id="pressureProgress"></circle>
-        </svg>
-        <div class="gauge-value" id="pressureValue">0 hPa</div>
-      </div>
+    <div id="stormDetails" class="details">
+      <p><span class="icon">📍</span> <strong>Current Location:</strong> <span id="location">--</span></p>
+      <p>🌪️ Radius Of Maximum Winds: <span id="maxWinds">--</span></p>
+      <p>🌀 Radius Of Outermost Closed Isobar: <span id="outerIsobar">--</span></p>
+      <p>⛈️ Environmental Pressure: <span id="envPressure">--</span></p>
     </div>
 
-    <div class="details">
-      <p id="locationInfo">Location: —</p>
-      <p id="categoryInfo">Category: —</p>
+    <div class="gauges">
+      <div class="gauge">
+        <p class="label">💨 Winds:</p>
+        <svg width="180" height="180">
+          <circle class="bg" cx="90" cy="90" r="70" />
+          <circle id="windCircle" class="progress" cx="90" cy="90" r="70" />
+        </svg>
+        <div class="gauge-value" id="windValue">-- km/h</div>
+      </div>
+
+      <div class="gauge">
+        <p class="label">🌡️ Pressure:</p>
+        <svg width="180" height="180">
+          <circle class="bg" cx="90" cy="90" r="70" />
+          <circle id="pressureCircle" class="progress" cx="90" cy="90" r="70" />
+        </svg>
+        <div class="gauge-value" id="pressureValue">-- mb</div>
+      </div>
     </div>
   </div>
 
-  <script>
-    const storms = {
-      alpha: { wind: 120, pressure: 970, location: "Atlantic Ocean", category: "Category 3" },
-      bravo: { wind: 80, pressure: 995, location: "Pacific Ocean", category: "Category 1" },
-      charlie: { wind: 200, pressure: 910, location: "Caribbean Sea", category: "Category 5" },
-    };
-
-    const stormSelect = document.getElementById("stormSelect");
-    const windValue = document.getElementById("windValue");
-    const pressureValue = document.getElementById("pressureValue");
-    const windProgress = document.getElementById("windProgress");
-    const pressureProgress = document.getElementById("pressureProgress");
-    const locationInfo = document.getElementById("locationInfo");
-    const categoryInfo = document.getElementById("categoryInfo");
-
-    function updateDashboard(stormData) {
-      // Update numbers
-      windValue.textContent = `${stormData.wind} km/h`;
-      pressureValue.textContent = `${stormData.pressure} hPa`;
-      locationInfo.textContent = `Location: ${stormData.location}`;
-      categoryInfo.textContent = `Category: ${stormData.category}`;
-
-      // Update wind color by threshold
-      let color = "#00ff80";
-      if (stormData.wind >= 60 && stormData.wind < 120) color = "#ffff00";
-      else if (stormData.wind >= 120 && stormData.wind < 180) color = "#ff8800";
-      else if (stormData.wind >= 180) color = "#ff0000";
-
-      // Update circle stroke and fill percentage
-      const windPercent = Math.min(stormData.wind / 250, 1);
-      const pressurePercent = Math.min((1050 - stormData.pressure) / 200, 1);
-
-      windProgress.style.stroke = color;
-      windProgress.style.strokeDashoffset = 440 - 440 * windPercent;
-      pressureProgress.style.stroke = "#00aaff";
-      pressureProgress.style.strokeDashoffset = 440 - 440 * pressurePercent;
-    }
-
-    stormSelect.addEventListener("change", (e) => {
-      const selected = storms[e.target.value];
-      updateDashboard(selected);
-    });
-
-    // Initialize
-    updateDashboard(storms.alpha);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
