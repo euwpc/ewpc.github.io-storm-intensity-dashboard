@@ -66,20 +66,23 @@ body {
   width: 180px;
   height: 180px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .label {
-  font-weight: bold;
-  margin-bottom: 10px;
+  margin-top: 6px;
   font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 svg {
   width: 180px;
   height: 180px;
   transform: rotate(-90deg);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 circle {
@@ -102,13 +105,16 @@ circle {
   transition: stroke 0.3s, stroke-dashoffset 0.5s;
 }
 
-.gauge-value {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  right: 0;
-  font-size: 2rem;
-  font-weight: bold;
+.gauge-content {
+  position: relative;
   text-align: center;
+  z-index: 2;
 }
+
+.gauge-value {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
 
