@@ -386,18 +386,20 @@ const timeStart = document.getElementById("timeStart");
 const timeEnd = document.getElementById("timeEnd");
 
 function windColor(speed) {
-  if (speed < 62) return "#00ff66";
-  if (speed < 118) return "#ffff00";
-  if (speed < 178) return "#ff8000";
-  if (speed < 252) return "#ff0000";
+  if (speed > 60) return "#00ffff";
+  if (speed < 60) return "#00ff66";
+  if (speed < 75) return "#ffff00";
+  if (speed < 90) return "#ff8000";
+  if (speed < 130) return "#ff0000";
   return "#b000ff";
 }
 
 function pressureColor(pressure) {
+  if (pressure > 1010) return "#00ffff";
   if (pressure > 1000) return "#00ff66";
-  if (pressure > 980) return "#ffff00";
-  if (pressure > 950) return "#ff8000";
-  if (pressure > 920) return "#ff0000";
+  if (pressure > 990) return "#ffff00";
+  if (pressure > 970) return "#ff8000";
+  if (pressure > 945) return "#ff0000";
   return "#b000ff";
 }
 
