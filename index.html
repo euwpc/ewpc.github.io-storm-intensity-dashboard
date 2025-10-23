@@ -386,7 +386,7 @@ const timeStart = document.getElementById("timeStart");
 const timeEnd = document.getElementById("timeEnd");
 
 function windColor(speed) {
-  if (speed > 60) return "#00ffff";
+  if (speed < 40) return "#00ffff";
   if (speed < 60) return "#00ff66";
   if (speed < 75) return "#ffff00";
   if (speed < 90) return "#ff8000";
@@ -399,7 +399,7 @@ function pressureColor(pressure) {
   if (pressure > 1000) return "#00ff66";
   if (pressure > 990) return "#ffff00";
   if (pressure > 970) return "#ff8000";
-  if (pressure > 945) return "#ff0000";
+  if (pressure > 925) return "#ff0000";
   return "#b000ff";
 }
 
