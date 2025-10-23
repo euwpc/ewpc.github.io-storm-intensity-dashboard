@@ -6,7 +6,6 @@
 <title>Storm Viewer</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
-
     body {
         background-color: #0d1b1e;
         color: #fff;
@@ -15,38 +14,45 @@
         overflow-x: hidden;
     }
 
-    /* Top Timeline */
-    .timeline {
-        width: 100%;
-        height: 4px;
-        background-color: #00ff66;
-        position: relative;
-        margin-top: 10px;
+    header {
+        text-align: center;
+        padding: 20px 0 0;
     }
 
-    .timeline::after {
-        content: "";
-        position: absolute;
-        top: -6px;
-        right: 0;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: #00ff66;
+    select {
+        background: #002a1a;
+        border: 2px solid #00ff66;
+        color: #00ff66;
+        font-family: inherit;
+        font-size: 1.1rem;
+        padding: 6px 12px;
+        border-radius: 6px;
+        outline: none;
+    }
+
+    .timeline-container {
+        margin: 30px auto 10px;
+        width: 90%;
+        text-align: center;
+    }
+
+    input[type="range"] {
+        width: 80%;
+        accent-color: #00ff66;
     }
 
     .time-labels {
         display: flex;
         justify-content: space-between;
-        margin: 8px 15px;
+        margin: 6px auto;
         color: #9cc9b5;
         font-size: 0.9rem;
+        width: 80%;
     }
 
-    /* Center Info Section */
     .info-section {
         text-align: center;
-        margin-top: 50px;
+        margin-top: 40px;
     }
 
     .info-icon {
@@ -90,7 +96,6 @@
         color: #00ff66;
     }
 
-    /* Gauges */
     .gauges {
         display: flex;
         justify-content: center;
@@ -122,7 +127,7 @@
 
     .gauge-progress {
         stroke: #00ff66;
-        transition: stroke-dashoffset 1s ease;
+        transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
     }
 
     .gauge-value {
@@ -154,67 +159,139 @@
         color: #b0b0b0;
         font-size: 0.9rem;
     }
-
 </style>
 </head>
 <body>
 
-    <div class="timeline"></div>
+<header>
+    <h1>Select Storm</h1>
+    <select id="stormSelect">
+        <option value="13L">13L</option>
+        <option value="15E">15E</option>
+        <option value="98W">98W</option>
+    </select>
+</header>
+
+<div class="timeline-container">
+    <input type="range" id="timeSlider" min="0" max="2" value="0">
     <div class="time-labels">
-        <span>Fri, 17 Oct 2025 12:00 UTC</span>
-        <span>Thu, 23 Oct 2025 06:00 UTC</span>
+        <span id="timeStart">--</span>
+        <span id="timeEnd">--</span>
+    </div>
+</div>
+
+<div class="info-section">
+    <div class="info-icon">ℹ️</div>
+    <h2>Current Information</h2>
+    <div class="divider"></div>
+    <ul class="info-list" id="stormInfo">
+        <li><span class="highlight">📍 Current Location:</span> --</li>
+        <li>🌀 Radius Of Maximum Winds: --</li>
+        <li>🌐 Radius Of Outermost Closed Isobar: --</li>
+        <li>⏱ Environmental Pressure: --</li>
+    </ul>
+</div>
+
+<div class="gauges">
+    <!-- Wind Gauge -->
+    <div class="gauge" id="windGauge">
+        <div class="gauge-label">💨 Winds:</div>
+        <svg width="220" height="220">
+            <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
+            <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
+        </svg>
+        <div class="gauge-value" id="windValue">--</div>
+        <div class="gauge-subtext" id="windSub">--</div>
     </div>
 
-    <div class="info-section">
-        <div class="info-icon">ℹ️</div>
-        <h2>Current Information</h2>
-        <div class="divider"></div>
-        <ul class="info-list">
-            <li><span class="highlight">📍 Current Location:</span> 14.7°N, 74.6°W</li>
-            <li>🌀 Radius Of Maximum Winds: 60NM</li>
-            <li>🌐 Radius Of Outermost Closed Isobar: 120NM</li>
-            <li>⏱ Environmental Pressure: 1007mb</li>
-        </ul>
+    <!-- Pressure Gauge -->
+    <div class="gauge" id="pressureGauge">
+        <div class="gauge-label">🌡 Pressure:</div>
+        <svg width="220" height="220">
+            <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
+            <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
+        </svg>
+        <div class="gauge-value" id="pressureValue">--</div>
+        <div class="gauge-subtext" id="pressureSub">--</div>
     </div>
-
-    <div class="gauges">
-        <!-- Wind Gauge -->
-        <div class="gauge" id="windGauge">
-            <div class="gauge-label">💨 Winds:</div>
-            <svg width="220" height="220">
-                <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-                <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-            </svg>
-            <div class="gauge-value" id="windValue">45 kts</div>
-            <div class="gauge-subtext">52 mph; 83 kph</div>
-        </div>
-
-        <!-- Pressure Gauge -->
-        <div class="gauge" id="pressureGauge">
-            <div class="gauge-label">🌡 Pressure:</div>
-            <svg width="220" height="220">
-                <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-                <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-            </svg>
-            <div class="gauge-value" id="pressureValue">1002 mb</div>
-            <div class="gauge-subtext">29.59 inHg</div>
-        </div>
-    </div>
+</div>
 
 <script>
-    // Gauge animation logic
-    function animateGauge(id, value, maxValue) {
-        const circle = document.querySelector(`#${id} .gauge-progress`);
-        const radius = circle.r.baseVal.value;
-        const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (value / maxValue) * circumference;
-        circle.style.strokeDasharray = circumference;
-        circle.style.strokeDashoffset = offset;
-    }
+const storms = {
+    "13L": [
+        { time: "17 Oct 2025 12:00 UTC", lat: "14.7°N", lon: "74.6°W", wind: 45, pressure: 1002, rmax: "60NM", outer: "120NM", env: "1007mb" },
+        { time: "20 Oct 2025 00:00 UTC", lat: "16.2°N", lon: "73.0°W", wind: 65, pressure: 988, rmax: "50NM", outer: "100NM", env: "1005mb" },
+        { time: "23 Oct 2025 06:00 UTC", lat: "18.5°N", lon: "70.4°W", wind: 90, pressure: 965, rmax: "35NM", outer: "80NM", env: "1003mb" }
+    ],
+    "15E": [
+        { time: "10 Sep 2025 00:00 UTC", lat: "11.2°N", lon: "105.3°W", wind: 30, pressure: 1006, rmax: "80NM", outer: "150NM", env: "1010mb" },
+        { time: "12 Sep 2025 12:00 UTC", lat: "12.1°N", lon: "107.8°W", wind: 55, pressure: 992, rmax: "60NM", outer: "110NM", env: "1006mb" },
+        { time: "15 Sep 2025 06:00 UTC", lat: "14.3°N", lon: "110.5°W", wind: 75, pressure: 970, rmax: "45NM", outer: "90NM", env: "1004mb" }
+    ],
+    "98W": [
+        { time: "5 Jul 2025 00:00 UTC", lat: "10.5°N", lon: "137.8°E", wind: 35, pressure: 1004, rmax: "70NM", outer: "130NM", env: "1008mb" },
+        { time: "7 Jul 2025 18:00 UTC", lat: "12.0°N", lon: "134.4°E", wind: 60, pressure: 985, rmax: "50NM", outer: "100NM", env: "1006mb" },
+        { time: "9 Jul 2025 06:00 UTC", lat: "13.6°N", lon: "131.0°E", wind: 95, pressure: 955, rmax: "30NM", outer: "70NM", env: "1003mb" }
+    ]
+};
 
-    // Example initial data
-    animateGauge('windGauge', 45, 150);
-    animateGauge('pressureGauge', 1002, 1050);
+const stormSelect = document.getElementById("stormSelect");
+const timeSlider = document.getElementById("timeSlider");
+const timeStart = document.getElementById("timeStart");
+const timeEnd = document.getElementById("timeEnd");
+
+function animateGauge(id, value, maxValue, color) {
+    const circle = document.querySelector(`#${id} .gauge-progress`);
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (value / maxValue) * circumference;
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = color;
+}
+
+// Auto color by wind intensity
+function windColor(speed) {
+    if (speed < 34) return "#00ff66";
+    if (speed < 64) return "#ffff00";
+    if (speed < 96) return "#ff6600";
+    return "#ff0000";
+}
+
+function updateDisplay() {
+    const storm = storms[stormSelect.value];
+    const index = parseInt(timeSlider.value);
+    const data = storm[index];
+
+    document.getElementById("stormInfo").innerHTML = `
+        <li><span class="highlight">📍 Current Location:</span> ${data.lat}, ${data.lon}</li>
+        <li>🌀 Radius Of Maximum Winds: ${data.rmax}</li>
+        <li>🌐 Radius Of Outermost Closed Isobar: ${data.outer}</li>
+        <li>⏱ Environmental Pressure: ${data.env}</li>
+    `;
+
+    document.getElementById("windValue").textContent = `${data.wind} kts`;
+    document.getElementById("pressureValue").textContent = `${data.pressure} mb`;
+
+    document.getElementById("windSub").textContent = `${Math.round(data.wind*1.15)} mph; ${Math.round(data.wind*1.85)} kph`;
+    document.getElementById("pressureSub").textContent = `${(data.pressure/33.8639).toFixed(2)} inHg`;
+
+    timeStart.textContent = storm[0].time;
+    timeEnd.textContent = storm[storm.length-1].time;
+
+    animateGauge("windGauge", data.wind, 150, windColor(data.wind));
+    animateGauge("pressureGauge", data.pressure, 1050, "#00ff66");
+}
+
+stormSelect.addEventListener("change", () => {
+    timeSlider.value = 0;
+    updateDisplay();
+});
+
+timeSlider.addEventListener("input", updateDisplay);
+
+// Initial load
+updateDisplay();
 </script>
 
 </body>
