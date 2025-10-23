@@ -1,471 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storm Viewer</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Storm Viewer</title>
+  <style>
+    body {
+      background: #0d2320;
+      color: #fff;
+      font-family: "Orbitron", sans-serif;
+      text-align: center;
+      margin: 0;
+    }
 
-body {
-  background-color: #0d1b1e;
-  color: #fff;
-  font-family: 'Rajdhani', sans-serif;
-  margin: 0;
-  overflow-x: hidden;
-}
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0a1918;
+      padding: 10px 30px;
+      box-shadow: 0 0 10px #000;
+    }
 
-/* Navigation bar */
-nav {
-  background: #0a1917;
-  border-bottom: 2px solid #00ff66;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 24px;
-  box-shadow: 0 0 10px #001a12;
-  flex-wrap: wrap;
-}
+    .navbar h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
 
-nav .logo {
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: #00ff66;
-  letter-spacing: 1px;
-}
+    .navbar a {
+      color: #00ff80;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-nav ul {
-  display: flex;
-  gap: 25px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+    #stormSelect {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+    }
 
-nav a {
-  text-decoration: none;
-  color: #a8b9ad;
-  font-weight: 500;
-  transition: color 0.2s;
-}
+    .container {
+      margin-top: 50px;
+    }
 
-nav a:hover {
-  color: #00ff66;
-}
+    .info-header {
+      text-align: center;
+    }
 
-.menu-toggle {
-  display: none;
-  font-size: 1.8rem;
-  color: #00ff66;
-  background: none;
-  border: none;
-}
+    .info-line {
+      width: 60px;
+      height: 3px;
+      background: #00ff80;
+      margin: 10px auto;
+      border-radius: 3px;
+    }
 
-/* Main structure */
-header {
-  text-align: center;
-  padding: 20px 0 0;
-}
+    .gauges {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+      margin-top: 40px;
+    }
 
-select {
-  background: #002a1a;
-  border: 2px solid #00ff66;
-  color: #00ff66;
-  font-family: inherit;
-  font-size: 1.1rem;
-  padding: 6px 12px;
-  border-radius: 6px;
-  outline: none;
-}
+    .gauge {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-/* Note */
-.note {
-  text-align: center;
-  color: #9cc9b5;
-  font-size: 0.95rem;
-  background: #002a1a;
-  border: 1px solid #00ff66;
-  border-radius: 6px;
-  margin: 20px auto;
-  width: 85%;
-  padding: 10px;
-  box-shadow: 0 0 8px #001a12;
-}
+    svg {
+      width: 180px;
+      height: 180px;
+      transform: rotate(-90deg);
+    }
 
-.note strong {
-  color: #00ff66;
-}
+    circle {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      cx: 90;
+      cy: 90;
+      r: 70;
+    }
 
-.timeline-container {
-  margin: 30px auto 10px;
-  width: 90%;
-  text-align: center;
-}
+    .bg {
+      stroke: #111;
+    }
 
-input[type="range"] {
-  width: 80%;
-  accent-color: #00ff66;
-}
+    .progress {
+      stroke: #00ff80;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke 0.3s, stroke-dashoffset 0.5s;
+    }
 
-.time-labels {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px auto;
-  color: #9cc9b5;
-  font-size: 0.9rem;
-  width: 80%;
-}
+    .gauge-value {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+    }
 
-.info-section {
-  text-align: center;
-  margin-top: 40px;
-}
+    .note {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
 
-.info-icon {
-  font-size: 26px;
-  color: #00ff66;
-  background: #002a1a;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-h2 {
-  margin: 10px 0 5px 0;
-  font-size: 1.8rem;
-  letter-spacing: 0.5px;
-}
-
-.divider {
-  width: 50px;
-  height: 3px;
-  background: #00ff66;
-  margin: 10px auto 20px;
-}
-
-.info-list {
-  color: #a8b9ad;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-size: 1rem;
-}
-
-.info-list li {
-  margin: 6px 0;
-}
-
-.highlight {
-  color: #00ff66;
-}
-
-.gauges {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 120px;
-  margin-top: 80px;
-  flex-wrap: wrap;
-}
-
-.gauge {
-  position: relative;
-  width: 220px;
-  height: 220px;
-}
-
-.gauge svg {
-  transform: rotate(-90deg);
-}
-
-.gauge circle {
-  fill: none;
-  stroke-width: 12;
-  stroke-linecap: round;
-}
-
-.gauge-bg {
-  stroke: #002a1a;
-}
-
-.gauge-progress {
-  stroke: #00ff66;
-  transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
-}
-
-.gauge-value {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-.gauge-label {
-  position: absolute;
-  top: -30px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: #00ff66;
-  font-size: 1rem;
-}
-
-.gauge-subtext {
-  position: absolute;
-  bottom: -35px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  color: #b0b0b0;
-  font-size: 0.9rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  nav ul {
-    flex-direction: column;
-    width: 100%;
-    display: none;
-    margin-top: 10px;
-  }
-
-  nav ul.show {
-    display: flex;
-  }
-
-  .gauges {
-    flex-direction: column;
-    gap: 60px;
-  }
-
-  .gauge {
-    width: 180px;
-    height: 180px;
-  }
-
-  .gauge-value {
-    font-size: 2rem;
-  }
-
-  .gauge-label {
-    font-size: 0.9rem;
-  }
-
-  .info-section {
-    margin-top: 20px;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  select {
-    width: 80%;
-  }
-
-  .note {
-    font-size: 0.85rem;
-    width: 90%;
-  }
-}
-</style>
+    input[type="range"] {
+      width: 300px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-
-<!-- Navigation -->
-<nav>
-  <div class="logo">Storm Dashboard</div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-  <ul id="navMenu">
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Outlooks</a></li>
-    <li><a href="#">Glossary</a></li>
-    <li><a href="#">Archive</a></li>
-    <li><a href="#">Help</a></li>
-    <li><a href="#">FAQ</a></li>
-  </ul>
-</nav>
-
-<header>
-  <h1>Select Storm</h1>
-  <!-- ⚡ Add or rename options here -->
-  <select id="stormSelect">
-    <option value="13L">13L</option>
-    <option value="15E">15E</option>
-    <option value="98W">98W</option>
-    <option value="01A">01A</option> <!-- example new storm -->
-  </select>
-</header>
-
-<!-- NOTE Section -->
-<div class="note">
-  <strong>NOTE:</strong> This page is inspired by KnackWX. For best experience, enable <strong>“Desktop Site”</strong> on mobile.
-</div>
-
-<!-- ⏱ Time slider -->
-<div class="timeline-container">
-  <!-- 💡 Change "max" if you add more time entries -->
-  <input type="range" id="timeSlider" min="0" max="2" value="0">
-  <div class="time-labels">
-    <span id="timeStart">--</span>
-    <span id="timeEnd">--</span>
-  </div>
-</div>
-
-<div class="info-section">
-  <div class="info-icon">ℹ️</div>
-  <h2>Current Information</h2>
-  <div class="divider"></div>
-  <ul class="info-list" id="stormInfo">
-    <li><span class="highlight">📍 Current Location:</span> --</li>
-    <li>🌀 Radius Of Maximum Winds: --</li>
-    <li>🌐 Radius Of Outermost Closed Isobar: --</li>
-    <li>⏱ Environmental Pressure: --</li>
-  </ul>
-</div>
-
-<div class="gauges">
-  <div class="gauge" id="windGauge">
-    <div class="gauge-label">💨 Winds:</div>
-    <svg width="220" height="220">
-      <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-      <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-    </svg>
-    <div class="gauge-value" id="windValue">--</div>
-    <div class="gauge-subtext" id="windSub">--</div>
+  <div class="navbar">
+    <h1>Storm Viewer</h1>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="archives.html">Archives</a>
+    </div>
   </div>
 
-  <div class="gauge" id="pressureGauge">
-    <div class="gauge-label">🌡 Pressure:</div>
-    <svg width="220" height="220">
-      <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-      <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-    </svg>
-    <div class="gauge-value" id="pressureValue">--</div>
-    <div class="gauge-subtext" id="pressureSub">--</div>
+  <div class="container">
+    <h2>Select Storm</h2>
+    <select id="stormSelect">
+      <option value="storm1">Storm Alpha</option>
+      <option value="storm2">Storm Bravo</option>
+      <option value="storm3">Storm Charlie</option>
+    </select>
+
+    <div class="info-header">
+      <h2>Current Information</h2>
+      <div class="info-line"></div>
+    </div>
+
+    <div class="gauges">
+      <div class="gauge">
+        <svg>
+          <circle class="bg"></circle>
+          <circle class="progress" id="windCircle"></circle>
+        </svg>
+        <div class="gauge-value" id="windValue">-- km/h</div>
+        <div class="label">Wind</div>
+      </div>
+
+      <div class="gauge">
+        <svg>
+          <circle class="bg"></circle>
+          <circle class="progress" id="pressureCircle"></circle>
+        </svg>
+        <div class="gauge-value" id="pressureValue">-- hPa</div>
+        <div class="label">Pressure</div>
+      </div>
+    </div>
+
+    <input type="range" id="timeSlider" min="0" max="4" value="0" />
+    <p id="timeLabel">Time: 00Z</p>
+
+    <p class="note">
+      NOTE: This page is inspired by KnackWX. We also encourage mobile users to turn on "Desktop site" mode when viewing this page.
+    </p>
   </div>
-</div>
 
-<script>
-function toggleMenu() {
-  document.getElementById("navMenu").classList.toggle("show");
-}
+  <script>
+    const storms = {
+      storm1: {
+        name: "Storm Alpha",
+        data: [
+          { time: "00Z", wind: 50, pressure: 1008 },
+          { time: "06Z", wind: 80, pressure: 995 },
+          { time: "12Z", wind: 120, pressure: 970 },
+          { time: "18Z", wind: 140, pressure: 950 },
+          { time: "24Z", wind: 160, pressure: 930 },
+        ],
+      },
+      storm2: {
+        name: "Storm Bravo",
+        data: [
+          { time: "00Z", wind: 40, pressure: 1010 },
+          { time: "06Z", wind: 65, pressure: 990 },
+          { time: "12Z", wind: 100, pressure: 970 },
+          { time: "18Z", wind: 130, pressure: 940 },
+          { time: "24Z", wind: 145, pressure: 925 },
+        ],
+      },
+      storm3: {
+        name: "Storm Charlie",
+        data: [
+          { time: "00Z", wind: 60, pressure: 1005 },
+          { time: "06Z", wind: 90, pressure: 985 },
+          { time: "12Z", wind: 110, pressure: 970 },
+          { time: "18Z", wind: 135, pressure: 940 },
+          { time: "24Z", wind: 150, pressure: 930 },
+        ],
+      },
+    };
 
-/* 🌪 Storm data section — add or edit storms here */
-const storms = {
-  "13L": [
-    { time: "17 Oct 2025 12:00 UTC", lat: "14.7°N", lon: "74.6°W", wind: 83, pressure: 1002, rmax: "60NM", outer: "120NM", env: "1007mb" },
-    { time: "20 Oct 2025 00:00 UTC", lat: "16.2°N", lon: "73.0°W", wind: 120, pressure: 988, rmax: "50NM", outer: "100NM", env: "1005mb" },
-    { time: "23 Oct 2025 06:00 UTC", lat: "18.5°N", lon: "70.4°W", wind: 170, pressure: 960, rmax: "35NM", outer: "80NM", env: "1003mb" }
-  ],
-  "15E": [
-    { time: "10 Sep 2025 00:00 UTC", lat: "11.2°N", lon: "105.3°W", wind: 65, pressure: 1006, rmax: "80NM", outer: "150NM", env: "1010mb" },
-    { time: "12 Sep 2025 12:00 UTC", lat: "12.1°N", lon: "107.8°W", wind: 110, pressure: 985, rmax: "60NM", outer: "110NM", env: "1006mb" },
-    { time: "15 Sep 2025 06:00 UTC", lat: "14.3°N", lon: "110.5°W", wind: 190, pressure: 940, rmax: "45NM", outer: "90NM", env: "1004mb" }
-  ],
-  "98W": [
-    { time: "5 Jul 2025 00:00 UTC", lat: "10.5°N", lon: "137.8°E", wind: 75, pressure: 1004, rmax: "70NM", outer: "130NM", env: "1008mb" },
-    { time: "7 Jul 2025 18:00 UTC", lat: "12.0°N", lon: "134.4°E", wind: 145, pressure: 970, rmax: "50NM", outer: "100NM", env: "1006mb" },
-    { time: "9 Jul 2025 06:00 UTC", lat: "13.6°N", lon: "131.0°E", wind: 220, pressure: 910, rmax: "30NM", outer: "70NM", env: "1003mb" }
-  ],
-  "01A": [ /* Example custom storm */
-    { time: "1 May 2025 00:00 UTC", lat: "10.2°N", lon: "60.5°E", wind: 70, pressure: 1005, rmax: "70NM", outer: "130NM", env: "1009mb" },
-    { time: "2 May 2025 12:00 UTC", lat: "11.0°N", lon: "59.1°E", wind: 110, pressure: 980, rmax: "55NM", outer: "110NM", env: "1005mb" },
-    { time: "3 May 2025 06:00 UTC", lat: "12.5°N", lon: "57.8°E", wind: 160, pressure: 950, rmax: "45NM", outer: "100NM", env: "1003mb" }
-  ]
-};
+    const windCircle = document.getElementById("windCircle");
+    const pressureCircle = document.getElementById("pressureCircle");
+    const windValue = document.getElementById("windValue");
+    const pressureValue = document.getElementById("pressureValue");
+    const stormSelect = document.getElementById("stormSelect");
+    const timeSlider = document.getElementById("timeSlider");
+    const timeLabel = document.getElementById("timeLabel");
 
-/* 🧭 Color logic and gauge visuals */
-function windColor(speed) {
-  if (speed < 40) return "#00ffff";
-  if (speed < 60) return "#00ff66";
-  if (speed < 75) return "#ffff00";
-  if (speed < 90) return "#ff8000";
-  if (speed < 130) return "#ff0000";
-  return "#b000ff";
-}
+    const circumference = 440;
 
-function pressureColor(pressure) {
-  if (pressure > 1010) return "#00ffff";
-  if (pressure > 1000) return "#00ff66";
-  if (pressure > 990) return "#ffff00";
-  if (pressure > 970) return "#ff8000";
-  if (pressure > 925) return "#ff0000";
-  return "#b000ff";
-}
+    function setGauge(circle, value, min, max, colorFunc) {
+      const clamped = Math.min(Math.max(value, min), max);
+      const progress = ((clamped - min) / (max - min)) * circumference;
+      const offset = circumference - progress;
+      circle.style.strokeDashoffset = offset;
+      circle.style.stroke = colorFunc(clamped);
+    }
 
-function animateGauge(id, value, maxValue, color) {
-  const circle = document.querySelector(`#${id} .gauge-progress`);
-  const radius = circle.r.baseVal.value;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (value / maxValue) * circumference;
-  circle.style.strokeDasharray = circumference;
-  circle.style.strokeDashoffset = offset;
-  circle.style.stroke = color;
-}
+    function windColor(wind) {
+      if (wind < 60) return "#00ff80";
+      if (wind < 90) return "#80ff00";
+      if (wind < 120) return "#ffff00";
+      if (wind < 140) return "#ff8000";
+      return "#ff0000";
+    }
 
-/* 🌍 Updates all displayed data when slider/storm changes */
-function updateDisplay() {
-  const storm = storms[stormSelect.value];
-  const index = parseInt(timeSlider.value);
-  const data = storm[index];
+    function pressureColor(pressure) {
+      if (pressure > 1000) return "#00ff80";
+      if (pressure > 980) return "#80ff00";
+      if (pressure > 960) return "#ffff00";
+      if (pressure > 940) return "#ff8000";
+      return "#ff0000";
+    }
 
-  const color = windColor(data.wind);
-  const pColor = pressureColor(data.pressure);
+    function updateDisplay() {
+      const storm = storms[stormSelect.value];
+      const point = storm.data[timeSlider.value];
+      timeLabel.textContent = `Time: ${point.time}`;
+      windValue.textContent = `${point.wind} km/h`;
+      pressureValue.textContent = `${point.pressure} hPa`;
 
-  document.getElementById("stormInfo").innerHTML = `
-    <li><span class="highlight">📍 Current Location:</span> ${data.lat}, ${data.lon}</li>
-    <li>🌀 Radius Of Maximum Winds: ${data.rmax}</li>
-    <li>🌐 Radius Of Outermost Closed Isobar: ${data.outer}</li>
-    <li>⏱ Environmental Pressure: ${data.env}</li>
-  `;
+      setGauge(windCircle, point.wind, 40, 140, windColor);
+      setGauge(pressureCircle, 1010 - (point.pressure - 925), 0, 85, () =>
+        pressureColor(point.pressure)
+      );
+    }
 
-  document.getElementById("windValue").textContent = `${data.wind} km/h`;
-  document.getElementById("pressureValue").textContent = `${data.pressure} mb`;
+    stormSelect.addEventListener("change", updateDisplay);
+    timeSlider.addEventListener("input", updateDisplay);
 
-  const kts = (data.wind / 1.852).toFixed(0);
-  const mph = (data.wind / 1.609).toFixed(0);
-  document.getElementById("windSub").textContent = `${kts} kts; ${mph} mph`;
-  document.getElementById("pressureSub").textContent = `${(data.pressure/33.8639).toFixed(2)} inHg`;
-
-  timeStart.textContent = storm[0].time;
-  timeEnd.textContent = storm[storm.length - 1].time;
-
-  /* 💨 Adjust gauge max if needed */
-  animateGauge("windGauge", data.wind, 300, color);
-  animateGauge("pressureGauge", 1050 - data.pressure, 200, pColor);
-}
-
-/* ⛓ Bind controls */
-const stormSelect = document.getElementById("stormSelect");
-const timeSlider = document.getElementById("timeSlider");
-const timeStart = document.getElementById("timeStart");
-const timeEnd = document.getElementById("timeEnd");
-
-stormSelect.addEventListener("change", () => {
-  timeSlider.value = 0;
-  updateDisplay();
-});
-
-timeSlider.addEventListener("input", updateDisplay);
-
-/* Initial load */
-updateDisplay();
-</script>
+    updateDisplay();
+  </script>
 </body>
 </html>
