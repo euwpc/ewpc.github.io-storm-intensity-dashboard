@@ -1,54 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Storm Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storm Viewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar-left">
-      <h1>Storm Dashboard</h1>
-    </div>
-    <div class="navbar-right">
-      <select id="stormSelect">
-        <option value="none" selected>Select Storm</option>
-      </select>
-    </div>
-  </nav>
-
-  <div class="container">
+  <div class="info-section">
     <div class="info-header">
-      <div class="info-icon">❗</div>
+      <div class="info-icon">ℹ️</div>
       <h2>Current Information</h2>
       <div class="info-line"></div>
     </div>
 
-    <div id="stormDetails" class="details">
-      <p><span class="icon">📍</span> <strong>Current Location:</strong> <span id="location">--</span></p>
-      <p>🌪️ Radius Of Maximum Winds: <span id="maxWinds">--</span></p>
-      <p>🌀 Radius Of Outermost Closed Isobar: <span id="outerIsobar">--</span></p>
-      <p>⛈️ Environmental Pressure: <span id="envPressure">--</span></p>
+    <div class="storm-details">
+      <p><span class="icon">📍</span> <strong>Current Location:</strong> <span id="location">14.7°N, 74.6°W</span></p>
+      <p><span class="icon">🌪️</span> Radius Of Maximum Winds: <span id="maxWinds">60NM</span></p>
+      <p><span class="icon">🌀</span> Radius Of Outermost Closed Isobar: <span id="outerIsobar">120NM</span></p>
+      <p><span class="icon">⛈️</span> Environmental Pressure: <span id="envPressure">1007mb</span></p>
     </div>
 
     <div class="gauges">
       <div class="gauge">
-        <p class="label">💨 Winds:</p>
-        <svg width="180" height="180">
-          <circle class="bg" cx="90" cy="90" r="70" />
-          <circle id="windCircle" class="progress" cx="90" cy="90" r="70" />
-        </svg>
-        <div class="gauge-value" id="windValue">-- km/h</div>
+        <p class="label"><span class="icon">🌬️</span> Winds:</p>
+        <div class="circle">
+          <svg>
+            <circle class="bg" cx="90" cy="90" r="80"></circle>
+            <circle id="windCircle" class="progress" cx="90" cy="90" r="80"></circle>
+          </svg>
+          <div class="value" id="windValue">45 kts</div>
+        </div>
+        <p class="sub">52 mph; 83 kph</p>
       </div>
 
       <div class="gauge">
-        <p class="label">🌡️ Pressure:</p>
-        <svg width="180" height="180">
-          <circle class="bg" cx="90" cy="90" r="70" />
-          <circle id="pressureCircle" class="progress" cx="90" cy="90" r="70" />
-        </svg>
-        <div class="gauge-value" id="pressureValue">-- mb</div>
+        <p class="label"><span class="icon">⚙️</span> Pressure:</p>
+        <div class="circle">
+          <svg>
+            <circle class="bg" cx="90" cy="90" r="80"></circle>
+            <circle id="pressureCircle" class="progress" cx="90" cy="90" r="80"></circle>
+          </svg>
+          <div class="value" id="pressureValue">1002 mb</div>
+        </div>
+        <p class="sub">29.59 inHg</p>
       </div>
     </div>
   </div>
