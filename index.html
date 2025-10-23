@@ -78,6 +78,24 @@ select {
   outline: none;
 }
 
+/* Note */
+.note {
+  text-align: center;
+  color: #9cc9b5;
+  font-size: 0.95rem;
+  background: #002a1a;
+  border: 1px solid #00ff66;
+  border-radius: 6px;
+  margin: 20px auto;
+  width: 85%;
+  padding: 10px;
+  box-shadow: 0 0 8px #001a12;
+}
+
+.note strong {
+  color: #00ff66;
+}
+
 .timeline-container {
   margin: 30px auto 10px;
   width: 90%;
@@ -259,6 +277,11 @@ h2 {
   select {
     width: 80%;
   }
+
+  .note {
+    font-size: 0.85rem;
+    width: 90%;
+  }
 }
 </style>
 </head>
@@ -286,6 +309,11 @@ h2 {
     <option value="98W">98W</option>
   </select>
 </header>
+
+<!-- NOTE Section -->
+<div class="note">
+  <strong>NOTE:</strong> This page is inspired by KnackWX. We also encourage mobile users to turn on <strong>"Desktop site"</strong> mode when viewing this page.
+</div>
 
 <div class="timeline-container">
   <input type="range" id="timeSlider" min="0" max="2" value="0">
