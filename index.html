@@ -5,234 +5,282 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Storm Viewer</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
-    body {
-        background-color: #0d1b1e;
-        color: #fff;
-        font-family: 'Rajdhani', sans-serif;
-        margin: 0;
-        overflow-x: hidden;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
 
-    header {
-        text-align: center;
-        padding: 20px 0 0;
-    }
+body {
+  background-color: #0d1b1e;
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
 
-    select {
-        background: #002a1a;
-        border: 2px solid #00ff66;
-        color: #00ff66;
-        font-family: inherit;
-        font-size: 1.1rem;
-        padding: 6px 12px;
-        border-radius: 6px;
-        outline: none;
-    }
+/* Navigation bar */
+nav {
+  background: #0a1917;
+  border-bottom: 2px solid #00ff66;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
+  box-shadow: 0 0 10px #001a12;
+}
 
-    .timeline-container {
-        margin: 30px auto 10px;
-        width: 90%;
-        text-align: center;
-    }
+nav .logo {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #00ff66;
+  letter-spacing: 1px;
+}
 
-    input[type="range"] {
-        width: 80%;
-        accent-color: #00ff66;
-    }
+nav ul {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-    .time-labels {
-        display: flex;
-        justify-content: space-between;
-        margin: 6px auto;
-        color: #9cc9b5;
-        font-size: 0.9rem;
-        width: 80%;
-    }
+nav a {
+  text-decoration: none;
+  color: #a8b9ad;
+  font-weight: 500;
+  transition: color 0.2s;
+}
 
-    .info-section {
-        text-align: center;
-        margin-top: 40px;
-    }
+nav a:hover {
+  color: #00ff66;
+}
 
-    .info-icon {
-        font-size: 26px;
-        color: #00ff66;
-        background: #002a1a;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
+/* Main structure */
+header {
+  text-align: center;
+  padding: 20px 0 0;
+}
 
-    h2 {
-        margin: 10px 0 5px 0;
-        font-size: 1.8rem;
-        letter-spacing: 0.5px;
-    }
+select {
+  background: #002a1a;
+  border: 2px solid #00ff66;
+  color: #00ff66;
+  font-family: inherit;
+  font-size: 1.1rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  outline: none;
+}
 
-    .divider {
-        width: 50px;
-        height: 3px;
-        background: #00ff66;
-        margin: 10px auto 20px;
-    }
+.timeline-container {
+  margin: 30px auto 10px;
+  width: 90%;
+  text-align: center;
+}
 
-    .info-list {
-        color: #a8b9ad;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-size: 1rem;
-    }
+input[type="range"] {
+  width: 80%;
+  accent-color: #00ff66;
+}
 
-    .info-list li {
-        margin: 6px 0;
-    }
+.time-labels {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px auto;
+  color: #9cc9b5;
+  font-size: 0.9rem;
+  width: 80%;
+}
 
-    .highlight {
-        color: #00ff66;
-    }
+.info-section {
+  text-align: center;
+  margin-top: 40px;
+}
 
-    .gauges {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 120px;
-        margin-top: 80px;
-        flex-wrap: wrap;
-    }
+.info-icon {
+  font-size: 26px;
+  color: #00ff66;
+  background: #002a1a;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .gauge {
-        position: relative;
-        width: 220px;
-        height: 220px;
-    }
+h2 {
+  margin: 10px 0 5px 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+}
 
-    .gauge svg {
-        transform: rotate(-90deg);
-    }
+.divider {
+  width: 50px;
+  height: 3px;
+  background: #00ff66;
+  margin: 10px auto 20px;
+}
 
-    .gauge circle {
-        fill: none;
-        stroke-width: 12;
-        stroke-linecap: round;
-    }
+.info-list {
+  color: #a8b9ad;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+}
 
-    .gauge-bg {
-        stroke: #002a1a;
-    }
+.info-list li {
+  margin: 6px 0;
+}
 
-    .gauge-progress {
-        stroke: #00ff66;
-        transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
-    }
+.highlight {
+  color: #00ff66;
+}
 
-    .gauge-value {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        font-size: 2.5rem;
-        font-weight: 700;
-    }
+.gauges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 120px;
+  margin-top: 80px;
+  flex-wrap: wrap;
+}
 
-    .gauge-label {
-        position: absolute;
-        top: -30px;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        color: #00ff66;
-        font-size: 1rem;
-    }
+.gauge {
+  position: relative;
+  width: 220px;
+  height: 220px;
+}
 
-    .gauge-subtext {
-        position: absolute;
-        bottom: -35px;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        color: #b0b0b0;
-        font-size: 0.9rem;
-    }
+.gauge svg {
+  transform: rotate(-90deg);
+}
+
+.gauge circle {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.gauge-bg {
+  stroke: #002a1a;
+}
+
+.gauge-progress {
+  stroke: #00ff66;
+  transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
+}
+
+.gauge-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.gauge-label {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #00ff66;
+  font-size: 1rem;
+}
+
+.gauge-subtext {
+  position: absolute;
+  bottom: -35px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #b0b0b0;
+  font-size: 0.9rem;
+}
 </style>
 </head>
 <body>
 
+<!-- Navigation -->
+<nav>
+  <div class="logo">Storm Dashboard</div>
+  <ul>
+    <li><a href="index.html">Viewer</a></li>
+    <li><a href="analysis.html">Analysis</a></li>
+    <li><a href="maps.html">Maps</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
 <header>
-    <h1>Select Storm</h1>
-    <select id="stormSelect">
-        <option value="13L">13L</option>
-        <option value="15E">15E</option>
-        <option value="98W">98W</option>
-    </select>
+  <h1>Select Storm</h1>
+  <select id="stormSelect">
+    <option value="13L">13L</option>
+    <option value="15E">15E</option>
+    <option value="98W">98W</option>
+  </select>
 </header>
 
 <div class="timeline-container">
-    <input type="range" id="timeSlider" min="0" max="2" value="0">
-    <div class="time-labels">
-        <span id="timeStart">--</span>
-        <span id="timeEnd">--</span>
-    </div>
+  <input type="range" id="timeSlider" min="0" max="2" value="0">
+  <div class="time-labels">
+    <span id="timeStart">--</span>
+    <span id="timeEnd">--</span>
+  </div>
 </div>
 
 <div class="info-section">
-    <div class="info-icon">ℹ️</div>
-    <h2>Current Information</h2>
-    <div class="divider"></div>
-    <ul class="info-list" id="stormInfo">
-        <li><span class="highlight">📍 Current Location:</span> --</li>
-        <li>🌀 Radius Of Maximum Winds: --</li>
-        <li>🌐 Radius Of Outermost Closed Isobar: --</li>
-        <li>⏱ Environmental Pressure: --</li>
-    </ul>
+  <div class="info-icon">ℹ️</div>
+  <h2>Current Information</h2>
+  <div class="divider"></div>
+  <ul class="info-list" id="stormInfo">
+    <li><span class="highlight">📍 Current Location:</span> --</li>
+    <li>🌀 Radius Of Maximum Winds: --</li>
+    <li>🌐 Radius Of Outermost Closed Isobar: --</li>
+    <li>⏱ Environmental Pressure: --</li>
+  </ul>
 </div>
 
 <div class="gauges">
-    <!-- Wind Gauge -->
-    <div class="gauge" id="windGauge">
-        <div class="gauge-label">💨 Winds:</div>
-        <svg width="220" height="220">
-            <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-            <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-        </svg>
-        <div class="gauge-value" id="windValue">--</div>
-        <div class="gauge-subtext" id="windSub">--</div>
-    </div>
+  <div class="gauge" id="windGauge">
+    <div class="gauge-label">💨 Winds:</div>
+    <svg width="220" height="220">
+      <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
+      <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
+    </svg>
+    <div class="gauge-value" id="windValue">--</div>
+    <div class="gauge-subtext" id="windSub">--</div>
+  </div>
 
-    <!-- Pressure Gauge -->
-    <div class="gauge" id="pressureGauge">
-        <div class="gauge-label">🌡 Pressure:</div>
-        <svg width="220" height="220">
-            <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
-            <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
-        </svg>
-        <div class="gauge-value" id="pressureValue">--</div>
-        <div class="gauge-subtext" id="pressureSub">--</div>
-    </div>
+  <div class="gauge" id="pressureGauge">
+    <div class="gauge-label">🌡 Pressure:</div>
+    <svg width="220" height="220">
+      <circle class="gauge-bg" cx="110" cy="110" r="90"></circle>
+      <circle class="gauge-progress" cx="110" cy="110" r="90"></circle>
+    </svg>
+    <div class="gauge-value" id="pressureValue">--</div>
+    <div class="gauge-subtext" id="pressureSub">--</div>
+  </div>
 </div>
 
 <script>
 const storms = {
-    "13L": [
-        { time: "17 Oct 2025 12:00 UTC", lat: "14.7°N", lon: "74.6°W", wind: 45, pressure: 1002, rmax: "60NM", outer: "120NM", env: "1007mb" },
-        { time: "20 Oct 2025 00:00 UTC", lat: "16.2°N", lon: "73.0°W", wind: 65, pressure: 988, rmax: "50NM", outer: "100NM", env: "1005mb" },
-        { time: "23 Oct 2025 06:00 UTC", lat: "18.5°N", lon: "70.4°W", wind: 90, pressure: 965, rmax: "35NM", outer: "80NM", env: "1003mb" }
-    ],
-    "15E": [
-        { time: "10 Sep 2025 00:00 UTC", lat: "11.2°N", lon: "105.3°W", wind: 30, pressure: 1006, rmax: "80NM", outer: "150NM", env: "1010mb" },
-        { time: "12 Sep 2025 12:00 UTC", lat: "12.1°N", lon: "107.8°W", wind: 55, pressure: 992, rmax: "60NM", outer: "110NM", env: "1006mb" },
-        { time: "15 Sep 2025 06:00 UTC", lat: "14.3°N", lon: "110.5°W", wind: 75, pressure: 970, rmax: "45NM", outer: "90NM", env: "1004mb" }
-    ],
-    "98W": [
-        { time: "5 Jul 2025 00:00 UTC", lat: "10.5°N", lon: "137.8°E", wind: 35, pressure: 1004, rmax: "70NM", outer: "130NM", env: "1008mb" },
-        { time: "7 Jul 2025 18:00 UTC", lat: "12.0°N", lon: "134.4°E", wind: 60, pressure: 985, rmax: "50NM", outer: "100NM", env: "1006mb" },
-        { time: "9 Jul 2025 06:00 UTC", lat: "13.6°N", lon: "131.0°E", wind: 95, pressure: 955, rmax: "30NM", outer: "70NM", env: "1003mb" }
-    ]
+  "13L": [
+    { time: "17 Oct 2025 12:00 UTC", lat: "14.7°N", lon: "74.6°W", wind: 83, pressure: 1002, rmax: "60NM", outer: "120NM", env: "1007mb" },
+    { time: "20 Oct 2025 00:00 UTC", lat: "16.2°N", lon: "73.0°W", wind: 120, pressure: 988, rmax: "50NM", outer: "100NM", env: "1005mb" },
+    { time: "23 Oct 2025 06:00 UTC", lat: "18.5°N", lon: "70.4°W", wind: 170, pressure: 960, rmax: "35NM", outer: "80NM", env: "1003mb" }
+  ],
+  "15E": [
+    { time: "10 Sep 2025 00:00 UTC", lat: "11.2°N", lon: "105.3°W", wind: 65, pressure: 1006, rmax: "80NM", outer: "150NM", env: "1010mb" },
+    { time: "12 Sep 2025 12:00 UTC", lat: "12.1°N", lon: "107.8°W", wind: 110, pressure: 985, rmax: "60NM", outer: "110NM", env: "1006mb" },
+    { time: "15 Sep 2025 06:00 UTC", lat: "14.3°N", lon: "110.5°W", wind: 190, pressure: 940, rmax: "45NM", outer: "90NM", env: "1004mb" }
+  ],
+  "98W": [
+    { time: "5 Jul 2025 00:00 UTC", lat: "10.5°N", lon: "137.8°E", wind: 75, pressure: 1004, rmax: "70NM", outer: "130NM", env: "1008mb" },
+    { time: "7 Jul 2025 18:00 UTC", lat: "12.0°N", lon: "134.4°E", wind: 145, pressure: 970, rmax: "50NM", outer: "100NM", env: "1006mb" },
+    { time: "9 Jul 2025 06:00 UTC", lat: "13.6°N", lon: "131.0°E", wind: 220, pressure: 910, rmax: "30NM", outer: "70NM", env: "1003mb" }
+  ]
 };
 
 const stormSelect = document.getElementById("stormSelect");
@@ -240,57 +288,60 @@ const timeSlider = document.getElementById("timeSlider");
 const timeStart = document.getElementById("timeStart");
 const timeEnd = document.getElementById("timeEnd");
 
-function animateGauge(id, value, maxValue, color) {
-    const circle = document.querySelector(`#${id} .gauge-progress`);
-    const radius = circle.r.baseVal.value;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (value / maxValue) * circumference;
-    circle.style.strokeDasharray = circumference;
-    circle.style.strokeDashoffset = offset;
-    circle.style.stroke = color;
+function windColor(speed) {
+  if (speed < 62) return "#00ff66";
+  if (speed < 118) return "#ffff00";
+  if (speed < 178) return "#ff8000";
+  if (speed < 252) return "#ff0000";
+  return "#b000ff";
 }
 
-// Auto color by wind intensity
-function windColor(speed) {
-    if (speed < 34) return "#00ff66";
-    if (speed < 64) return "#ffff00";
-    if (speed < 96) return "#ff6600";
-    return "#ff0000";
+function animateGauge(id, value, maxValue, color) {
+  const circle = document.querySelector(`#${id} .gauge-progress`);
+  const radius = circle.r.baseVal.value;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (value / maxValue) * circumference;
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = color;
 }
 
 function updateDisplay() {
-    const storm = storms[stormSelect.value];
-    const index = parseInt(timeSlider.value);
-    const data = storm[index];
+  const storm = storms[stormSelect.value];
+  const index = parseInt(timeSlider.value);
+  const data = storm[index];
 
-    document.getElementById("stormInfo").innerHTML = `
-        <li><span class="highlight">📍 Current Location:</span> ${data.lat}, ${data.lon}</li>
-        <li>🌀 Radius Of Maximum Winds: ${data.rmax}</li>
-        <li>🌐 Radius Of Outermost Closed Isobar: ${data.outer}</li>
-        <li>⏱ Environmental Pressure: ${data.env}</li>
-    `;
+  const color = windColor(data.wind);
 
-    document.getElementById("windValue").textContent = `${data.wind} kts`;
-    document.getElementById("pressureValue").textContent = `${data.pressure} mb`;
+  document.getElementById("stormInfo").innerHTML = `
+    <li><span class="highlight">📍 Current Location:</span> ${data.lat}, ${data.lon}</li>
+    <li>🌀 Radius Of Maximum Winds: ${data.rmax}</li>
+    <li>🌐 Radius Of Outermost Closed Isobar: ${data.outer}</li>
+    <li>⏱ Environmental Pressure: ${data.env}</li>
+  `;
 
-    document.getElementById("windSub").textContent = `${Math.round(data.wind*1.15)} mph; ${Math.round(data.wind*1.85)} kph`;
-    document.getElementById("pressureSub").textContent = `${(data.pressure/33.8639).toFixed(2)} inHg`;
+  document.getElementById("windValue").textContent = `${data.wind} km/h`;
+  document.getElementById("pressureValue").textContent = `${data.pressure} mb`;
 
-    timeStart.textContent = storm[0].time;
-    timeEnd.textContent = storm[storm.length-1].time;
+  const kts = (data.wind / 1.852).toFixed(0);
+  const mph = (data.wind / 1.609).toFixed(0);
+  document.getElementById("windSub").textContent = `${kts} kts; ${mph} mph`;
+  document.getElementById("pressureSub").textContent = `${(data.pressure/33.8639).toFixed(2)} inHg`;
 
-    animateGauge("windGauge", data.wind, 150, windColor(data.wind));
-    animateGauge("pressureGauge", data.pressure, 1050, "#00ff66");
+  timeStart.textContent = storm[0].time;
+  timeEnd.textContent = storm[storm.length - 1].time;
+
+  animateGauge("windGauge", data.wind, 300, color);
+  animateGauge("pressureGauge", 1050 - data.pressure, 200, color);
 }
 
 stormSelect.addEventListener("change", () => {
-    timeSlider.value = 0;
-    updateDisplay();
+  timeSlider.value = 0;
+  updateDisplay();
 });
 
 timeSlider.addEventListener("input", updateDisplay);
 
-// Initial load
 updateDisplay();
 </script>
 
