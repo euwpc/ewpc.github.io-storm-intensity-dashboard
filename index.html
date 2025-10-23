@@ -464,4 +464,13 @@ const timeStart = document.getElementById("timeStart");
 const timeEnd = document.getElementById("timeEnd");
 
 stormSelect.addEventListener("change", () => {
- 
+ timeSlider.value = 0;
+ updateDisplay();
+});
+  timeSlider.addEventListener("input", updateDisplay);
+  
+  /* Initial load */ 
+  updateDisplay(); 
+</script> 
+</body> 
+</html>
