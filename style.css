@@ -1,113 +1,37 @@
-body {
-  background: #0d2320;
-  font-family: 'Rajdhani', sans-serif;
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  padding: 0;
+// Example data (you can connect it to your storm selector later)
+const storm = {
+  windSpeedKts: 45,
+  windSpeedKph: 83,
+  windSpeedMph: 52,
+  pressure: 1002,
+};
+
+// Animate gauges
+function setGauge(circleId, percent, color) {
+  const circle = document.getElementById(circleId);
+  const radius = 80;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - percent * circumference;
+  circle.style.strokeDashoffset = offset;
+  circle.style.stroke = color;
 }
 
-.info-section {
-  margin-top: 40px;
+// Calculate color intensity based on wind strength
+function getWindColor(speed) {
+  if (speed < 34) return "#00ff66";
+  if (speed < 63) return "#ffff00";
+  if (speed < 95) return "#ff8000";
+  if (speed < 115) return "#ff3300";
+  return "#b000ff";
 }
 
-.info-header {
-  text-align: center;
+function updateDisplay() {
+  const windPercent = Math.min(storm.windSpeedKph / 300, 1);
+  const pressurePercent = Math.max((1050 - storm.pressure) / 100, 0);
+
+  const color = getWindColor(storm.windSpeedKts);
+  setGauge("windCircle", windPercent, color);
+  setGauge("pressureCircle", pressurePercent, color);
 }
 
-.info-icon {
-  font-size: 2rem;
-  color: #00ff66;
-}
-
-.info-header h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 10px 0;
-}
-
-.info-line {
-  width: 60px;
-  height: 3px;
-  background: #00ff66;
-  margin: 10px auto;
-  border-radius: 3px;
-}
-
-.storm-details {
-  margin-top: 10px;
-}
-
-.storm-details p {
-  font-size: 1rem;
-  margin: 6px 0;
-  color: #cfcfcf;
-}
-
-.icon {
-  color: #00ff66;
-}
-
-.gauges {
-  display: flex;
-  justify-content: center;
-  gap: 120px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
-.gauge {
-  text-align: center;
-}
-
-.label {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #00ff66;
-}
-
-.circle {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  margin: 10px auto;
-}
-
-svg {
-  width: 180px;
-  height: 180px;
-  transform: rotate(-90deg);
-}
-
-circle {
-  fill: none;
-  stroke-width: 12;
-  stroke-linecap: round;
-}
-
-.bg {
-  stroke: #000;
-}
-
-.progress {
-  stroke: #00ff66;
-  stroke-dasharray: 505;
-  stroke-dashoffset: 505;
-  transition: stroke-dashoffset 1s ease-out, stroke 0.3s;
-}
-
-.value {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.3rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.sub {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #ccc;
-}
+updateDisplay();
