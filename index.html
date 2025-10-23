@@ -299,7 +299,7 @@ const PRESSURE_MIN = 925; // lowest (max fill)
 const PRESSURE_MAX = 1010; // highest (start)
 
 function windColor(speed) {
-  if (speed < 40) return "#00ffff";
+  if (speed > 40) return "#00ffff";
   if (speed < 60) return "#00ff66";
   if (speed < 75) return "#ffff00";
   if (speed < 90) return "#ff8000";
