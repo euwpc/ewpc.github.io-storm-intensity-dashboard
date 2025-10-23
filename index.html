@@ -22,8 +22,9 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 40px;
+  padding: 12px 24px;
   box-shadow: 0 0 10px #001a12;
+  flex-wrap: wrap;
 }
 
 nav .logo {
@@ -50,6 +51,14 @@ nav a {
 
 nav a:hover {
   color: #00ff66;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: #00ff66;
+  background: none;
+  border: none;
 }
 
 /* Main structure */
@@ -198,6 +207,59 @@ h2 {
   color: #b0b0b0;
   font-size: 0.9rem;
 }
+
+/* --- Responsive adjustments --- */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+    display: none;
+    margin-top: 10px;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  .gauges {
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  .gauge {
+    width: 180px;
+    height: 180px;
+  }
+
+  .gauge-value {
+    font-size: 2rem;
+  }
+
+  .gauge-label {
+    font-size: 0.9rem;
+  }
+
+  .info-section {
+    margin-top: 20px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  select {
+    width: 80%;
+  }
+}
 </style>
 </head>
 <body>
@@ -205,7 +267,8 @@ h2 {
 <!-- Navigation -->
 <nav>
   <div class="logo">Storm Dashboard</div>
-  <ul>
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <ul id="navMenu">
     <li><a href="https://euwpc.github.io/ewpc.github.io-home/">Home</a></li>
     <li><a href="https://euwpc.github.io/ewpc.github.io-outlooks/">Outlooks</a></li>
     <li><a href="https://euwpc.github.io/ewpc.github.io-glossary/">Glossary</a></li>
@@ -267,6 +330,10 @@ h2 {
 </div>
 
 <script>
+function toggleMenu() {
+  document.getElementById("navMenu").classList.toggle("show");
+}
+
 const storms = {
   "13L": [
     { time: "17 Oct 2025 12:00 UTC", lat: "14.7°N", lon: "74.6°W", wind: 83, pressure: 1002, rmax: "60NM", outer: "120NM", env: "1007mb" },
@@ -298,6 +365,14 @@ function windColor(speed) {
   return "#b000ff";
 }
 
+function pressureColor(pressure) {
+  if (pressure > 1000) return "#00ff66";
+  if (pressure > 980) return "#ffff00";
+  if (pressure > 950) return "#ff8000";
+  if (pressure > 920) return "#ff0000";
+  return "#b000ff";
+}
+
 function animateGauge(id, value, maxValue, color) {
   const circle = document.querySelector(`#${id} .gauge-progress`);
   const radius = circle.r.baseVal.value;
@@ -314,6 +389,7 @@ function updateDisplay() {
   const data = storm[index];
 
   const color = windColor(data.wind);
+  const pColor = pressureColor(data.pressure);
 
   document.getElementById("stormInfo").innerHTML = `
     <li><span class="highlight">📍 Current Location:</span> ${data.lat}, ${data.lon}</li>
@@ -334,7 +410,7 @@ function updateDisplay() {
   timeEnd.textContent = storm[storm.length - 1].time;
 
   animateGauge("windGauge", data.wind, 300, color);
-  animateGauge("pressureGauge", 1050 - data.pressure, 200, color);
+  animateGauge("pressureGauge", 1050 - data.pressure, 200, pColor);
 }
 
 stormSelect.addEventListener("change", () => {
@@ -346,6 +422,5 @@ timeSlider.addEventListener("input", updateDisplay);
 
 updateDisplay();
 </script>
-
 </body>
 </html>
