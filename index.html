@@ -285,7 +285,7 @@ h2 { margin: 10px 0 5px 0; font-size: 1.8rem; letter-spacing: 0.5px; }
 <script>
 const storms = {
   "Potential Windstorm Benjamin": [
-    { time: "23 Oct 2025 23:00 UTC", lat: "54.3°N", lon: "6.2°E", wind: 35, pressure: 975, rmax: "0NM", outer: "0NM", env: "975mb" }
+    { time: "23 Oct 2025 23:00 UTC", lat: "54.3°N", lon: "6.2°E", wind: 40, pressure: 975, rmax: "0NM", outer: "0NM", env: "975mb" }
   ],
   "Potential Windstorm #14": [
     { time: "23 Oct 2025 23:00 UTC", lat: "56.1°N", lon: "10.1°W", wind: 75, pressure: 987, rmax: "0NM", outer: "0NM", env: "987mb" }
@@ -299,11 +299,11 @@ const PRESSURE_MIN = 925; // lowest (max fill)
 const PRESSURE_MAX = 1010; // highest (start)
 
 function windColor(speed) {
-  if (speed < 40) return "#00ffff";
-  if (speed < 60) return "#00ff66";
-  if (speed < 75) return "#ffff00";
-  if (speed < 90) return "#ff8000";
-  if (speed < 130) return "#ff0000";
+  if (speed < 41) return "#00ffff";
+  if (speed < 61) return "#00ff66";
+  if (speed < 76) return "#ffff00";
+  if (speed < 91) return "#ff8000";
+  if (speed < 131) return "#ff0000";
   return "#b000ff";
 }
 
