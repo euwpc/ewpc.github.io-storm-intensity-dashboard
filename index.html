@@ -234,6 +234,7 @@ h2 { margin: 10px 0 5px 0; font-size: 1.8rem; letter-spacing: 0.5px; }
   <select id="stormSelect">
     <option value="Windstorm Benjamin">Windstorm Benjamin</option>
     <option value="Potential Windstorm #14">Potential Windstorm #14</option>
+    <option value="Potential Windstorm #17">Potential Windstorm #17</option>
   </select>
 </header>
 
@@ -242,7 +243,7 @@ h2 { margin: 10px 0 5px 0; font-size: 1.8rem; letter-spacing: 0.5px; }
 </div>
 
 <div class="timeline-container">
-  <input type="range" id="timeSlider" min="0" max="4" value="0">
+  <input type="range" id="timeSlider" min="0" max="6" value="0">
   <div class="time-labels">
     <span id="timeStart">--</span>
     <span id="timeEnd">--</span>
@@ -290,13 +291,18 @@ const storms = {
     { time: "24 Oct 2025 00:00 UTC", lat: "54.3°N", lon: "6.2°E", wind: 95, pressure: 975, rmax: "0NM", outer: "0NM", env: "975mb" },
     { time: "24 Oct 2025 12:00 UTC", lat: "56.5°N", lon: "7.2°E", wind: 80, pressure: 980, rmax: "0NM", outer: "0NM", env: "980mb" },
     { time: "24 Oct 2025 18:00 UTC", lat: "57.2°N", lon: "5.6°E", wind: 95, pressure: 980, rmax: "0NM", outer: "0NM", env: "980mb" },
-    { time: "25 Oct 2025 00:00 UTC", lat: "57.1°N", lon: "5.4°E", wind: 75, pressure: 981, rmax: "0NM", outer: "0NM", env: "981mb" }
+    { time: "25 Oct 2025 00:00 UTC", lat: "57.1°N", lon: "5.4°E", wind: 75, pressure: 981, rmax: "0NM", outer: "0NM", env: "981mb" },
+    { time: "25 Oct 2025 06:00 UTC", lat: "56.5°N", lon: "6.4°E", wind: 75, pressure: 980, rmax: "0NM", outer: "0NM", env: "980mb" },
+    { time: "25 Oct 2025 12:00 UTC", lat: "57.1°N", lon: "7.1°E", wind: 90, pressure: 981, rmax: "0NM", outer: "0NM", env: "981mb" }
   ],
   "Potential Windstorm #14": [
     { time: "23 Oct 2025 23:00 UTC", lat: "56.1°N", lon: "10.1°W", wind: 75, pressure: 987, rmax: "0NM", outer: "0NM", env: "987mb" },
     { time: "24 Oct 2025 12:00 UTC", lat: "52.5°N", lon: "7.2°W", wind: 65, pressure: 995, rmax: "0NM", outer: "0NM", env: "995mb" },
     { time: "24 Oct 2025 18:00 UTC", lat: "51.6°N", lon: "4.1°W", wind: 40, pressure: 996, rmax: "0NM", outer: "0NM", env: "996mb" },
     { time: "25 Oct 2025 00:00 UTC", lat: "51.6°N", lon: "4.1°W", wind: 0, pressure: 0, rmax: "0NM", outer: "0NM", env: "0mb" }
+  ],
+  "Potential Windstorm #17" : [
+    { time: "25 Oct 2025 16:00 UTC", lat: "36.0°N", lon: "17.3°W", wind: 60, pressure: 1011, rmax: "0NM", outer: "0NM", env: "1011mb"}
   ]
 };
 
