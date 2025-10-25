@@ -381,9 +381,15 @@ const timeStart = document.getElementById("timeStart");
 const timeEnd = document.getElementById("timeEnd");
 
 stormSelect.addEventListener("change", () => {
+  const storm = storms[stormSelect.value];
+  if (storm) {
+    // 👇 dynamically set max value based on storm's data length
+    timeSlider.max = storm.length - 1;
+  }
   timeSlider.value = 0;
   updateDisplay();
 });
+
 
 timeSlider.addEventListener("input", updateDisplay);
 updateDisplay();
